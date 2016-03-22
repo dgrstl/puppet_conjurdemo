@@ -1,11 +1,16 @@
-class puppet_conjurdemo::setup {
+class puppet_conjurdemo::setup (
+  $conjur_url     = 'https://ec2-54-145-247-64.compute-1.amazonaws.com/api',
+  $conjur_account = 'demo',
+  $conjur_pem     = 'conjur-demo.pem',
+  $host_key       = 'xhz066wnnsm0sv6rxtp9qzt2wpj6cr25g03ga1tf354q37mdnne',
+) {
 
-  class { conjur:
-    conjur_url => 'https://ec2-54-145-247-64.compute-1.amazonaws.com/api',
-    conjur_certificate => file('conjur-demo.pem'),
-    conjur_account => 'demo',
-    host_id => 'ec2/i-c223b605',
-    host_key => 'x34kt69b5nxf1826kxh395e2wm3c3tvgk119hckp3dq8qt52wc3290',
+  class { 'conjur' :
+    conjur_url         => $conjur_url,
+    conjur_certificate => file("puppet_conjurdemo/${conjur_pem}"),
+    conjur_account     => $conjur_account,
+    host_id            => "ec2/i-da4e291d-n",
+    hostfactory_token  => $host_key,
   }
 
 }

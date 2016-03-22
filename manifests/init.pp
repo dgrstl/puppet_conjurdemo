@@ -1,17 +1,20 @@
 class puppet_conjurdemo (
-  $fname,
+  $fname           = '/tmp/secrets',
+  $secret_key_name = 'Puppet/production/foo',
 ) {
 
-  file { $fname :
-    ensure => present,
+  puppet_conjurdemo::secret_conf_file { $fname :
+    secrets => ['Puppet/production/foo', 'production/foo', 'puppetdemo/planet'],
   }
 
-  puppet_conjurdemo::secret { $fname :
-    secrets => ['Puppet/production/foo', 'production/foo', 'puppetdemo/planet'],
-    notify  => File[$fname],
+  user { 'josh':
+    ensure => 'present',
   }
-  #file { $fname :
-  #  content => template('puppet_conjurdemo/foo.erb'),
-  #}
+
+  puppet_conjurdemo::secret_value { 'josh' :
+    secret_key_name => 'Puppet/production/foo',
+    field           => 'comment',
+    resource        => User['josh'],
+  }
 
 }
