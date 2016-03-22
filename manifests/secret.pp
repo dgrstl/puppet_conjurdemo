@@ -3,7 +3,10 @@ define puppet_conjurdemo::secret (
   $secrets,
 ) {
 
-  data_collector { "$title Conjur secret":
-    template_body => template('puppet_conjurdemo/conjur_secret.erb'),
+  datacat_collector { "$title Conjur secret":
+    template        => "/tmp/datacat.erb",
+    template_body   => template('puppet_conjurdemo/conjur_secret.erb'),
+    target_resource => File["$path"],
+    target_field    => 'content',
   }
 }
