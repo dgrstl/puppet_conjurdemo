@@ -1,13 +1,16 @@
-class puppet_conjurdemo {
+class puppet_conjurdemo (
+  $fname,
+) {
 
-  file {'/tmp/secrets':
+  file { $fname :
     ensure => present,
   }
 
-  puppet_conjurdemo::secret { '/tmp/secrets':
+  puppet_conjurdemo::secret { $fname :
     secrets => ['Puppet/production/foo', 'production/foo', 'puppetdemo/planet'],
+    notify  => File[$fname],
   }
-  #file {'/tmp/foo':
+  #file { $fname :
   #  content => template('puppet_conjurdemo/foo.erb'),
   #}
 
